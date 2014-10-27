@@ -12,6 +12,7 @@ module OmniAuth
       end
 
       def request_phase
+        @user_data = {}
         @uid = validate_remote_user
         return fail!(:no_remote_user) unless @uid
 
@@ -27,7 +28,7 @@ module OmniAuth
 
       uid { @uid['EMAIL'] }
       info{ @user_data }
-    
+
     end
   end
 end
