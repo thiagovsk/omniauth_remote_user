@@ -10,9 +10,10 @@ module OmniAuth
 
         if cookies['gitlab_session'] != nil and !env['HTTP_REMOTE_USER'].blank?
           response.redirect "#{OmniAuth.config.path_prefix}/users/auth/env/"
+        else
+          super(env)
         end
 
-        super(env)
       end
 
       def request_phase
