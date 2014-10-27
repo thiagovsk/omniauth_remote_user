@@ -9,6 +9,5 @@ require 'rack/test'
 require 'omniauth/remote_user'
 
 RSpec.configure do |config|
-  config.include Rack::Test::Methods
+	config.include Rack::Test::Methods
 end
-
