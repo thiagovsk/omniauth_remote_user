@@ -7,3 +7,4 @@ test/tmp
 test/version_tmp
 tmp
 *.swp
+coverage/

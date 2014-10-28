@@ -9,10 +9,11 @@ if RUBY_VERSION >= '1.9'
 end
 require 'rubygems'
 require 'bundler'
+require 'rack/test'
 require 'rspec'
-require 'racktest'
-require 'omniatuh'
-require 'omniatuh/test'
+require 'rack/test'
+require 'omniauth'
+require 'omniauth/test'
 
 Bundler.setup :default, :development, :test
 
@@ -21,7 +22,4 @@ require 'omniauth/remote_user'
 
 RSpec.configure do |config|
 	config.include Rack::Test::Methods
-	config.expect_with rspec do |configuration|
-		configuration.sintax = :expect
-	end
 end

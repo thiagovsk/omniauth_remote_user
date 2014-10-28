@@ -9,6 +9,7 @@ group :development, :test do
 	gem 'rspec'
 	gem 'rake'
 	gem 'coveralls'
+	gem 'rack-test'
 end
 
 gemspec
