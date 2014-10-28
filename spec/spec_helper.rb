@@ -1,13 +1,27 @@
+if RUBY_VERSION >= '1.9'
+	require 'simplecov'
+	require 'coveralls'
+	SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter, Coveralls::SimpleCov::Formatter]
+	SimpleCov.start do
+		add_filter '/spec'
+		#minimum_coverage(90)
+	end
+end
 require 'rubygems'
 require 'bundler'
-Bundler.setup :default, :development, :test
+require 'rspec'
+require 'racktest'
+require 'omniatuh'
+require 'omniatuh/test'
 
-require 'simplecov'
-SimpleCov.start
+Bundler.setup :default, :development, :test
 
 require 'rack/test'
 require 'omniauth/remote_user'
 
 RSpec.configure do |config|
 	config.include Rack::Test::Methods
+	config.expect_with rspec do |configuration|
+		configuration.sintax = :expect
+	end
 end
