@@ -1,7 +1,10 @@
 module OmniAuth
-  module Stratagies
+  module Strategies
     class RemoteUser
       include OmniAuth::Strategy
+
+      option :fields, [:name, :email]
+      option :uid_field, :email
 
       def call(env)
         request = Rack::Request.new env

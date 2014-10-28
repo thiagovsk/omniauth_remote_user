@@ -1,7 +1,7 @@
 require 'omniauth'
 
 module Omniauth
-	module Stratagies
-		autoload :RemoteUser, 'omniauth/stratagies/remote_user'
+	module Strategies
+		autoload :RemoteUser, 'omniauth/strategies/remote_user'
 	end
 end
