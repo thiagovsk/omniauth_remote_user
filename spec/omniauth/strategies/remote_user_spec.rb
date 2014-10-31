@@ -5,12 +5,12 @@ describe 'Test Strategy Remote_User' do
 		Rack::Builder.new do |b|
 			b.use Rack::Session::Cookie, :secret => 'abc123'
 			b.use OmniAuth::Strategies::RemoteUser, :fields => [:name, :email], :uid_field => :name
-			b.run lambda { |_env| [200, {}, ['Not Found']] }
+			b.run  lambda { |_env| [200, {}, ['Not Found']] }
 		end.to_app
 	end
 
 	context 'request phase' do
-		before(:each) { get '/user/auth/env' }
+		before(:each) { get '/user/auth/env',{},{'HTTP_COOKIE' => '_gitlab_session=user@myuser','HTTP_REMOTE_USER' => "user@myuser" }}
 		it 'displays a form' do
 			expect(last_response.status).to eq(200)
 		end

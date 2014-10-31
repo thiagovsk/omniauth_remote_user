@@ -8,15 +8,11 @@ module OmniAuth
 
       def call(env)
         request = Rack::Request.new env
-        cookies = request.cookies
-        response = Rack::Response.new
-
-        if cookies['gitlab_session'] != nil and !env['HTTP_REMOTE_USER'].blank?
-          response.redirect "#{OmniAuth.config.path_prefix}/users/auth/env/"
-        else
+        cookies = request.cookies["_gitlab_session"]
+        remote_user = env["HTTP_REMOTE_USER"]
+        unless remote_user.empty? && cookies.empty?
           super(env)
         end
-
       end
 
       def request_phase
