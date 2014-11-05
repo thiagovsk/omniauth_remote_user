@@ -4,30 +4,41 @@ describe 'Test Strategy Remote_User' do
 	let(:app) do
 		Rack::Builder.new do |b|
 			b.use Rack::Session::Cookie, :secret => 'abc123'
-			b.use OmniAuth::Strategies::RemoteUser, :fields => [:name, :email], :uid_field => :name
-			b.run  lambda { |_env| [200, {'HTTP_REMOTE_USER' => 'myuser'}, ['My body']] }
+			b.use OmniAuth::Strategies::RemoteUser
+			b.run  lambda { |_env| [200, {}, ['My body']] }
 		end.to_app
 	end
 
-	context 'Response phase' do
-		before(:each) { get '/auth/remote_user',{},{'HTTP_COOKIE' => '_gitlab_session=user@myuser','HTTP_REMOTE_USER' => "user@myuser" }}
-		it 'check my rack response' do
-			expect(last_response.body).to eq('My body')
-			expect(last_response.status).to eq(200)
-			expect(last_response.original_headers).to eq({'HTTP_REMOTE_USER' => 'myuser' })
-			expect(last_response.errors).to eq('')
-		end
+	context 'Without REMOTE_USER and not logged in' do
+		 before(:each){get '/', {}, {}}
 
-		context 'Request phase' do
-			before(:each) { get '/auth/remote_user',{},{'HTTP_COOKIE' => '_gitlab_session=user@myuser','HTTP_REMOTE_USER' => "user@myuser" }}
-			it 'check my env request' do
-				expect(last_request.env['HTTP_COOKIE']).to eq("_gitlab_session=user@myuser")
-				expect(last_request.env['HTTP_REMOTE_USER']).to eq("user@myuser")
-				expect(last_request.request_method).to eq("GET")
-				expect(last_request.path_info).to eq("/auth/remote_user")
-			end
+		it 'Do nothing' do
+			last_response.status.should == 200
+			last_response.cookies['_remote_user'] == nil
 		end
 	end
 
+	context 'Without REMOTE_USER and logged in' do
+		#Logout current user
+		
 
+	end
+
+	context 'With REMOTE_USER and not logged in' do
+		#Login REMOTE_USER
+		it 'logs user in' do
+			get '/', {}, { 'HTTP_REMOTE_USER' => 'foobar' }
+		end
+	end
+
+	context 'With REMOTE_USER, logged in and current user equals REMOTE_USER' do
+		#do nothing
+
+	end
+
+	context 'With REMOTE_USER, logged in and current user not equals REMOTE_USER' do
+		#Logout current user and login REMOTE_USER
+
+	end
 end
+

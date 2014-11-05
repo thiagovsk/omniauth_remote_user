@@ -22,4 +22,5 @@ require 'omniauth/remote_user'
 
 RSpec.configure do |config|
 	config.include Rack::Test::Methods
+	config.extend OmniAuth::Test::StrategyMacros, :type => :strategy
 end
