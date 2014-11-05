@@ -1,4 +1,5 @@
 require 'omniauth'
+require 'json'
 
 module OmniAuth
 	module Strategies
