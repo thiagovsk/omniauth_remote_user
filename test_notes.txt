@@ -1,0 +1,27 @@
+Configurando apache para setar header Remote-User:
+
+1 - Instalar apache2
+2 - Criar arquivo de configuração (ex: proxy.conf) em /etc/apache2/sites-available
+
+<VirtualHost *:80>
+
+        ProxyPass / http://localhost:9292/
+
+        RequestHeader set Remote-User "terceiro"
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+</VirtualHost>
+
+3 - Habilitar site criado (a2ensite <conf>)
+4 - Habilitar módulos (proxy, proxy-http, headers) utilizando o comando a2enmod
+5 - Startar apache2 (service apache2 start)
+
+Referência: 
+http://stackoverflow.com/questions/567814/apache2-reverse-proxy-to-an-end-point-that-requires-basicauth-but-want-to-hide-t
+
+Executando aplicação sinatra:
+
+1 - Entrar no diretório que contem o arquivo conf.ru
+2 - Executar aplicação (rackup)
