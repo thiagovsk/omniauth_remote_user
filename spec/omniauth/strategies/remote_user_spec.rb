@@ -68,8 +68,51 @@ describe 'Test Strategy Remote_User' do
 	end
 
 	context 'With REMOTE_USER, logged in and current user not equals REMOTE_USER' do
-		#Logout current user and login REMOTE_USER
+		before(:each){
+			clear_cookies        
+			set_cookie "_gitlab_session=foobar"
+			set_cookie "_remote_user=foobar"
+			get '/', {}, { 'HTTP_REMOTE_USER' => 'foobar2' }
+		}
 
+		it 'Logout current user and login REMOTE_USER' do
+			expect(last_request.cookies['_gitlab_session']).to eq('foobar')
+			expect(last_request.cookies['_remote_user']).to eq('foobar')
+			expect(last_response.status).to eq(302)			
+			expect(last_response['Set-Cookie']).to eq('_remote_user=foobar2')	
+		end
+	end
+
+	context 'Verify omniauth hash with REMOTE_USER_DATA' do
+		before(:each){
+			clear_cookies
+			post '/auth/remoteuser/callback', {}, { 'HTTP_REMOTE_USER' => 'foobar', 
+									'HTTP_REMOTE_USER_DATA' => JSON.dump({'name' => 'foobar', 'email' => 'foobar@test.com'})}
+		}
+
+		it 'Verify uid' do
+			expect(last_request.env['omniauth.auth']['uid']).to eq('foobar')
+		end
+
+		it 'Verify info' do
+			expect(last_request.env['omniauth.auth']['info']['nickname']).to eq('foobar')
+			expect(last_request.env['omniauth.auth']['info']['email']).to eq('foobar@test.com')
+		end
+	end
+
+	context 'Verify omniauth.auth info without REMOTE_USER_DATA' do
+		before(:each){
+			clear_cookies
+			post '/auth/remoteuser/callback', {}, { 'HTTP_REMOTE_USER' => 'foobar' } 
+		}
+
+		it 'Verify uid' do
+			expect(last_request.env['omniauth.auth']['uid']).to eq('foobar')
+		end
+
+		it 'Verify info' do
+			expect(last_request.env['omniauth.auth']['info']).to eq({})
+		end
 	end
 end
 
