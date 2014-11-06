@@ -10,7 +10,6 @@ module OmniAuth
 
       def call(env)
         remote_user = env['HTTP_REMOTE_USER']
-        $stderr.puts('Remote-User: %s' % (remote_user || '(none'))
         session_user = __current_user(env)
         if remote_user
           if session_user
@@ -37,7 +36,6 @@ module OmniAuth
       end
 
       def __logout(env)
-        $stderr.puts 'LOGOUT'
         request = Rack::Request.new(env)
         response = redirect_if_not_logging_in(request, request.path)
         if response
@@ -48,7 +46,6 @@ module OmniAuth
       end
 
       def __login(env, uid)
-        $stderr.puts 'LOGIN (%s)' % uid
         request = Rack::Request.new(env)
         response = redirect_if_not_logging_in(request, '/auth/remoteuser')
         if response
