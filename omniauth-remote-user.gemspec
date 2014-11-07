@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/lib/omniauth_remote_user/version'
+require File.dirname(__FILE__) + '/lib/omniauth-remote-user/version'
 
 Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'omniauth'
@@ -11,8 +11,8 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'activerecord'
 
   gem.name = 'omniauth-remote-user'
-  gem.version = Omniauth::Remote_user::VERSION
-  gem.description = %q{Authentication with remote user HTTP header for Omniauth.}
+  gem.version = Omniauth::RemoteUser::VERSION
+  gem.description = %q{Authentication with Remote-User HTTP header for Omniauth.}
   gem.summary = gem.description
   gem.email = ['kanashiro.duarte@gmail.com', 'thiagitosouza@gmail.com', 'rodrigosiqueiramelo@gmail.com']
   gem.homepage = 'http://beta.softwarepublico.gov.br/gitlab/softwarepublico/omiauth-remote-user'
