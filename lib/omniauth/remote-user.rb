@@ -3,6 +3,6 @@ require 'json'
 
 module OmniAuth
 	module Strategies
-		autoload :RemoteUser, 'omniauth/strategies/remote_user'
+		autoload :RemoteUser , 'omniauth/strategies/remote_user'
 	end
 end
