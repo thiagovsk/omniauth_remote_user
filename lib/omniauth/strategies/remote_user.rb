@@ -11,7 +11,7 @@ module OmniAuth
 
 	def __write_file message 
 		file = File.open("/home/git/gitlab/log/remote_user.log",'a')
-		file.write message
+		file.write " \n #{message} \n"
 		file.close
 	end
 
@@ -21,34 +21,56 @@ module OmniAuth
 
         remote_user = env['HTTP_REMOTE_USER']
 
-	__write_file "#{remote_user}\n"
+	__write_file " ... Aqui esta o remote user #{remote_user}\n"
 
 
         session_user = __current_user(env)
-        if remote_user
-          if session_user
-            if remote_user == session_user
-              super(env)
-            else
-              __login(env, remote_user) || super(env)
-            end
-          else
-            __login(env, remote_user) || super(env)
-          end
-        else
-          if session_user
-            __logout(env) || super(env)
-          else
-            super(env)
-          end
-        end
+	__write_file " .....Aqui esta o session user ==   #{session_user}\n"
+
+	if  ! is_in_logout? (env)
+		if remote_user
+		  if session_user
+		    if  remote_user == session_user 
+			__write_file "Entrei no remote_user == session_user"
+		       super(env)
+		    else
+			__write_file "Entrei no remote_uer != session user com session user "      
+			__logout(env) 
+		    end
+		
+		   else
+			__write_file "Estou sem session+_user= #{session_user}" 
+			__login(env, remote_user) 
+		  end
+	       
+		else
+		
+		   if session_user
+			__write_file "Estou sem remote user e com session user  = #{session_user}" 
+			__logout(env) 
+		  else
+			__write_file "Estou sem remote user e sem session user  = #{session_user}" 
+			super(env)
+		  end
+		end
+	else
+		super env
+	end
 	
+
+      end
+
+
+      def is_in_logout? (env)
+        request = Rack::Request.new(env)
+	__write_file  "REQUEST PATH = #{request.path}"
+        request.path == '/users/sign_out'	
       end
 
       def __current_user(env)
-
 	__write_file "__CURRENT_USER"
         request = Rack::Request.new(env)
+	__write_file  "REQUEST PATH = #{request.path}"
         request.cookies.has_key?(options.internal_cookie) && request.cookies[options.internal_cookie]
       end
 
@@ -59,6 +81,7 @@ module OmniAuth
         if response
           response.delete_cookie(options.cookie)
           response.delete_cookie(options.internal_cookie)
+          response.redirect "/users/sign_out"
           response
         end
       end
@@ -74,7 +97,6 @@ module OmniAuth
       end
 
       def redirect_if_not_logging_in(request, url)
-	puts "__redirect_if_not_loggin_in"
 	
         if ! [
           '/users/auth/RemoteUser',
@@ -104,10 +126,7 @@ module OmniAuth
 
       def request_phase
 	__write_file "request phase\n"
-
-        form = OmniAuth::Form.new(:url => "RemoteUser/callback")
-        form.html '<script type="text/javascript"> document.forms[0].submit(); </script>'
-        form.to_response
+	redirect "/users/auth/RemoteUser/callback"
       end
     end
   end
