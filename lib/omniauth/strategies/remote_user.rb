@@ -4,7 +4,6 @@ module OmniAuth
 
       include OmniAuth::Strategy
 
-      option :cookie, 'rack.session'
       option :cookie, '_gitlab_session'
       option :internal_cookie, '_remote_user'
 
