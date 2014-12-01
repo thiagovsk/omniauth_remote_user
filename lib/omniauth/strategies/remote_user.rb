@@ -4,6 +4,7 @@ module OmniAuth
 
       include OmniAuth::Strategy
 
+      #option :cookie, 'rack.session'
       option :cookie, '_gitlab_session'
       option :internal_cookie, '_remote_user'
 
@@ -14,17 +15,17 @@ module OmniAuth
         if  ! is_in_logout? (env)
           if remote_user
             if session_user
-              if  remote_user == session_user
+              if remote_user == session_user
                 super(env)
               else
-                __logout(env)
+                __logout(env) || super(env)
               end
             else
-              __login(env, remote_user)
+              __login(env, remote_user) || super(env)
             end
           else
             if session_user
-              __logout(env)
+              __logout(env) || super(env)
             else
               super(env)
             end
@@ -32,11 +33,6 @@ module OmniAuth
         else
           super env
         end
-      end
-
-      def is_in_logout? (env)
-        request = Rack::Request.new(env)
-        request.path == '/users/sign_out'
       end
 
       def __current_user(env)
@@ -57,18 +53,22 @@ module OmniAuth
 
       def __login(env, uid)
         request = Rack::Request.new(env)
-        response = redirect_if_not_logging_in(request, '/users/auth/RemoteUser')
+        response = redirect_if_not_logging_in(request, "#{OmniAuth.config.path_prefix}/#{name}/callback")
         if response
           response.set_cookie(options.internal_cookie, uid)
           response
         end
       end
 
-      def redirect_if_not_logging_in(request, url)
+      def is_in_logout? (env)
+        request = Rack::Request.new(env)
+        request.path == '/users/sign_out'
+      end
 
+      def redirect_if_not_logging_in(request, url)
         if ! [
-            '/users/auth/RemoteUser',
-            '/users/auth/RemoteUser/callback'
+            "#{OmniAuth.config.path_prefix}/#{name}/",
+            "#{OmniAuth.config.path_prefix}/#{name}/callback"
           ].include?(request.path_info)
           response = Rack::Response.new
           response.redirect url
@@ -92,7 +92,7 @@ module OmniAuth
       end
 
       def request_phase
-        redirect "/users/auth/RemoteUser/callback"
+        "#{OmniAuth.config.path_prefix}/#{name}/callback"
       end
     end
   end
