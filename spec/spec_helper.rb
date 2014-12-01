@@ -18,7 +18,7 @@ require 'omniauth/test'
 Bundler.setup :default, :development, :test
 
 require 'rack/test'
-require 'omniauth/remote_user'
+require 'omniauth/remote-user'
 
 RSpec.configure do |config|
 	config.include Rack::Test::Methods
