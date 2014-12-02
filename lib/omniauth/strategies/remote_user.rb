@@ -1,10 +1,8 @@
 module OmniAuth
   module Strategies
     class RemoteUser
-
       include OmniAuth::Strategy
-
-      #option :cookie, 'rack.session'
+	
       option :cookie, '_gitlab_session'
       option :internal_cookie, '_remote_user'
 
@@ -46,14 +44,14 @@ module OmniAuth
         if response
           response.delete_cookie(options.cookie)
           response.delete_cookie(options.internal_cookie)
-          response.redirect "/users/sign_out"
+          response.redirect sign_out_path
           response
         end
       end
 
       def __login(env, uid)
         request = Rack::Request.new(env)
-        response = redirect_if_not_logging_in(request, "#{OmniAuth.config.path_prefix}/#{name}/callback")
+        response = redirect_if_not_logging_in(request, auth_path )
         if response
           response.set_cookie(options.internal_cookie, uid)
           response
@@ -62,13 +60,13 @@ module OmniAuth
 
       def is_in_logout? (env)
         request = Rack::Request.new(env)
-        request.path == '/users/sign_out'
+        request.path ==  sign_out_path
       end
 
       def redirect_if_not_logging_in(request, url)
         if ! [
-            "#{OmniAuth.config.path_prefix}/#{name}/",
-            "#{OmniAuth.config.path_prefix}/#{name}/callback"
+		auth_path,
+		callback_path
           ].include?(request.path_info)
           response = Rack::Response.new
           response.redirect url
@@ -92,8 +90,21 @@ module OmniAuth
       end
 
       def request_phase
-        "#{OmniAuth.config.path_prefix}/#{name}/callback"
+        redirect callback_path
       end
+
+      def callback_path
+	"#{auth_path}/callback"
+      end
+
+      def auth_path
+	"#{path_prefix}/RemoteUser"
+      end
+      
+      def sign_out_path
+       '/users/sign_out'
+      end
+	
     end
   end
 end
