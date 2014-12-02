@@ -2,7 +2,7 @@ module OmniAuth
   module Strategies
     class RemoteUser
       include OmniAuth::Strategy
-	
+
       option :cookie, '_gitlab_session'
       option :internal_cookie, '_remote_user'
 
@@ -65,8 +65,8 @@ module OmniAuth
 
       def redirect_if_not_logging_in(request, url)
         if ! [
-		auth_path,
-		callback_path
+            auth_path,
+            callback_path
           ].include?(request.path_info)
           response = Rack::Response.new
           response.redirect url
@@ -94,17 +94,17 @@ module OmniAuth
       end
 
       def callback_path
-	"#{auth_path}/callback"
+        "#{auth_path}/callback"
       end
 
       def auth_path
-	"#{path_prefix}/RemoteUser"
+        "#{path_prefix}/RemoteUser"
       end
-      
+
       def sign_out_path
-       '/users/sign_out'
+        '/users/sign_out'
       end
-	
+
     end
   end
 end

@@ -85,7 +85,7 @@ describe 'Test Strategy Remote_User' do
 	context 'Verify omniauth hash with REMOTE_USER_DATA' do
 		before(:each){
 			clear_cookies
-			post '/auth/remoteuser/callback', {}, { 'HTTP_REMOTE_USER' => 'foobar',
+			post '/auth/RemoteUser/callback', {}, { 'HTTP_REMOTE_USER' => 'foobar',
 																							'HTTP_REMOTE_USER_DATA' => JSON.dump({'name' => 'foobar', 'email' => 'foobar@test.com'})}
 		}
 
@@ -102,7 +102,7 @@ describe 'Test Strategy Remote_User' do
 	context 'Verify omniauth.auth info without REMOTE_USER_DATA' do
 		before(:each){
 			clear_cookies
-			post '/auth/remoteuser/callback', {}, { 'HTTP_REMOTE_USER' => 'foobar' }
+			post '/auth/RemoteUser/callback', {}, { 'HTTP_REMOTE_USER' => 'foobar' }
 		}
 
 		it 'Verify uid' do
