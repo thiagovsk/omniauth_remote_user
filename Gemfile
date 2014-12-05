@@ -1,15 +1,17 @@
 source "http://rubygems.org"
 
-group :development, :test do
+gemspec
+
+group :development do
 	gem 'guard'
-	gem 'guard-rspec'
 	gem 'guard-bundler'
-	gem 'rb-fsevent'
-	gem 'simplecov'
-	gem 'rspec'
+	gem 'guard-rspec'
 	gem 'rake'
-	gem 'coveralls'
-	gem 'rack-test'
 end
 
-gemspec
+group :test do
+	gem 'coveralls'
+	gem 'rack-test'
+	gem 'simplecov'
+	gem 'rspec'
+end
