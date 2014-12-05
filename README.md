@@ -2,16 +2,12 @@
 
 The Omniauth Remote User gem provides a way for application to utilize a authentication with remote user HTTP header.
 
-# Omniauth Gitlab Remote User
-
-This gem provides authentication of remote users in gitlab.
-
 # Instalation
 
-Include in you gitlab Gemfile
+Include in your Gemfile
 
 ```ruby
-gem "omniauth-remote-user", :git => "git@beta.softwarepublico.gov.br:softwarepublico/omniauth-remote-user.git"
+gem "omniauth-remote-user"
 ```
 Then run `bundle install` from the command line:
 
