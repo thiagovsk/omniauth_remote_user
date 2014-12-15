@@ -5,32 +5,43 @@ require 'json'
 module OmniAuth
   module Strategies
     class RemoteUser
-
       include OmniAuth::Strategy
-
-      option :cookie, 'rack.session'
+	
+      option :cookie, '_gitlab_session'
       option :internal_cookie, '_remote_user'
 
       def call(env)
+
         remote_user = env['HTTP_REMOTE_USER']
-        $stderr.puts('Remote-User: %s' % (remote_user || '(none'))
+	
+#	$stderr.puts('Remote-User: %s ' % (remote_user || '(none)'))
+         
+	#  $stderr.puts('relative_url: %s ' % (  env['SCRIPT_NAME']   ))       
+	#  :script_name - Specifies application path relative to domain root. If provided, prepends application path.
+	#  http://api.rubyonrails.org/classes/ActionDispatch/Routing/UrlFor.html
+
         session_user = __current_user(env)
-        if remote_user
-          if session_user
-            if remote_user == session_user
-              super(env)
+
+        if  ! is_in_logout? (env)
+          if remote_user
+            if session_user
+              if remote_user == session_user
+                super(env)
+              else
+                __logout(env) || super(env)
+              end
             else
               __login(env, remote_user) || super(env)
             end
           else
-            __login(env, remote_user) || super(env)
+            if session_user
+              __logout(env) || super(env)
+            else
+              super(env)
+            end
           end
         else
-          if session_user
-            __logout(env) || super(env)
-          else
-            super(env)
-          end
+          super env
         end
       end
 
@@ -40,9 +51,8 @@ module OmniAuth
       end
 
       def __logout(env)
-        $stderr.puts 'LOGOUT'
         request = Rack::Request.new(env)
-        response = redirect_if_not_logging_in(request, request.path)
+        response = redirect_if_not_logging_in(request, sign_out_path )
         if response
           response.delete_cookie(options.cookie)
           response.delete_cookie(options.internal_cookie)
@@ -51,20 +61,25 @@ module OmniAuth
       end
 
       def __login(env, uid)
-        $stderr.puts 'LOGIN (%s)' % uid
         request = Rack::Request.new(env)
-        response = redirect_if_not_logging_in(request, '/auth/remoteuser')
+        response = redirect_if_not_logging_in(request, auth_path )
         if response
           response.set_cookie(options.internal_cookie, uid)
           response
         end
       end
 
+      def is_in_logout? (env)
+        request = Rack::Request.new(env)
+        request.path ==  sign_out_path
+      end
+
       def redirect_if_not_logging_in(request, url)
         if ! [
-          '/auth/remoteuser',
-          '/auth/remoteuser/callback'
-        ].include?(request.path_info)
+		sign_out_path,
+		auth_path,
+		callback_path
+          ].include?(request.path_info)
           response = Rack::Response.new
           response.redirect url
           response
@@ -87,10 +102,21 @@ module OmniAuth
       end
 
       def request_phase
-        form = OmniAuth::Form.new(:url => callback_path)
-        form.html '<script type="text/javascript"> document.forms[0].submit(); </script>'
-        form.to_response
+        redirect callback_path
       end
+
+      def callback_path
+	"#{auth_path}/callback"
+      end
+
+      def auth_path
+	"#{path_prefix}/RemoteUser"
+      end
+      
+      def sign_out_path
+       '/users/sign_out'
+      end
+	
     end
   end
 end
@@ -98,13 +124,14 @@ end
 class MyApplication < Sinatra::Base
   use Rack::Session::Cookie, secret: '123'
 
-  STRATEGY = 'remoteuser'
+  STRATEGY = 'RemoteUser'
   use OmniAuth::Strategies::RemoteUser
   #STRATEGY = 'developer'
   #use OmniAuth::Strategies::Developer
 
+
   get '/login' do
-    redirect '/auth/%s' % STRATEGY
+    redirect '/gitlab/auth/%s' % STRATEGY
   end
 
   get '/logout' do
