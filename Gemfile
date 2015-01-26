@@ -7,6 +7,7 @@ group :development do
   gem 'guard-bundler'
   gem 'guard-rspec'
   gem 'rake'
+  gem 'bundler'
 end
 
 group :test do
