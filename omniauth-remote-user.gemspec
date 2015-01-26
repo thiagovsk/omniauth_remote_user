@@ -2,7 +2,6 @@ require File.dirname(__FILE__) + '/lib/omniauth-remote-user/version'
 
 Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'omniauth', '~> 1.0'
-  gem.add_development_dependency 'bundler', '~> 1.0'
   gem.name = 'omniauth-remote-user'
   gem.version = Omniauth::RemoteUser::VERSION
   gem.description = 'Authentication with Remote-User HTTP header for Omniauth.'
