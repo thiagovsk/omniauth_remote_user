@@ -7,6 +7,8 @@ if RUBY_VERSION >= '1.9'
 		#minimum_coverage(90)
 	end
 end
+Coveralls.wear!
+
 require 'rubygems'
 require 'bundler'
 require 'rack/test'

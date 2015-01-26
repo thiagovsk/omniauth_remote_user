@@ -1,0 +1,14 @@
+language: ruby
+
+before_script:
+- bundle exec rspec
+
+
+rvm:
+  - 2.0
+notifications:
+  recipients:
+    - thiagitosouza@hotmail.com
+branches:
+  only:
+    - master
