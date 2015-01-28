@@ -8,6 +8,7 @@ group :development do
   gem 'guard-rspec'
   gem 'rake'
   gem 'bundler'
+  gem 'sinatra'
 end
 
 group :test do

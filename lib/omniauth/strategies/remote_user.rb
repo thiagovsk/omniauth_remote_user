@@ -73,7 +73,8 @@ module OmniAuth
         user_data = request.env['HTTP_REMOTE_USER_DATA']
         if user_data
           data = JSON.parse(user_data)
-          data['nickname'] = data['firstname'] = data['name'].split()[0]
+          data['nickname'] = uid
+          data['firstname'] = data['name'].split()[0]
           data['lastname'] = data['name'].split()[1]
           data
         else
