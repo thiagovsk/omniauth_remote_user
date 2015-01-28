@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.version = Omniauth::RemoteUser::VERSION
   gem.description = 'Authentication with Remote-User HTTP header for Omniauth.'
   gem.summary = 'Authentication with HTTP Remote User'
-  gem.email = ['kanashiro.duarte@gmail.com', 'thiagitosouza@gmail.com', 'rodrigosiqueiramelo@gmail.com','macartur.sc@gmail.com','Antonio Terceiro']
+  gem.email = ['kanashiro.duarte@gmail.com', 'thiagitosouza@gmail.com', 'rodrigosiqueiramelo@gmail.com','macartur.sc@gmail.com','terceiro@softwarelivre.org']
   gem.homepage = 'http://beta.softwarepublico.gov.br/gitlab/softwarepublico/omiauth-remote-user'
   gem.authors = ['Lucas Kanashiro', 'Thiago Ribeiro', 'Rodrigo Siqueira','Macartur Sousa', 'Antonio Terceiro']
   gem.require_paths = %w(lib)
