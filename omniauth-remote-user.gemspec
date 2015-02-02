@@ -7,7 +7,7 @@ Gem::Specification.new do |gem|
   gem.description = 'Authentication with Remote-User HTTP header for Omniauth.'
   gem.summary = 'Authentication with HTTP Remote User'
   gem.email = ['kanashiro.duarte@gmail.com', 'thiagitosouza@gmail.com', 'rodrigosiqueiramelo@gmail.com','macartur.sc@gmail.com','terceiro@softwarelivre.org']
-  gem.homepage = 'http://beta.softwarepublico.gov.br/gitlab/softwarepublico/omiauth-remote-user'
+  gem.homepage = 'http://beta.softwarepublico.gov.br/gitlab/softwarepublico/omniauth-remote-user'
   gem.authors = ['Lucas Kanashiro', 'Thiago Ribeiro', 'Rodrigo Siqueira','Macartur Sousa', 'Antonio Terceiro']
   gem.require_paths = %w(lib)
   gem.files = `git ls-files -z`.split("\x0").reject {|f| f.start_with?('spec/')}
