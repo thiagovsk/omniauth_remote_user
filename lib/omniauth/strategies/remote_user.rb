@@ -70,7 +70,7 @@ module OmniAuth
       end
 
       info do
-        user_data = request.env['HTTP_REMOTE_USER_DATA']
+        user_data = request.env['X_REMOTE_USER_DATA']
         if user_data
           data = JSON.parse(user_data)
           data['nickname'] = uid
