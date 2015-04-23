@@ -48,7 +48,7 @@ module OmniAuth
         request = Rack::Request.new(env)
         response = redirect_if_not_logging_in(request,_auth_path(request) )
         if response
-          response.set_cookie(options.internal_cookie, {value: uid , path: "#{request.script_name}"})
+          response.set_cookie(options.internal_cookie, {value: uid, path: "#{request.script_name}", httponly: true})
           response.finish
         end
       end
