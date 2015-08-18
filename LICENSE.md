@@ -1,6 +1,6 @@
-Copyright (c) 2015 Antonio Terceiro
+Copyright © Lucas Kanashiro, Thiago Ribeiro, Rodrigo Siqueira, Macartur Sousa, Antonio Terceiro
 
-MIT License
+Expat (aka MIT) License
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
