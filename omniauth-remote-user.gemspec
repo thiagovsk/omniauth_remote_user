@@ -10,8 +10,8 @@ Gem::Specification.new do |gem|
   gem.homepage = 'http://beta.softwarepublico.gov.br/gitlab/softwarepublico/omniauth-remote-user'
   gem.authors = ['Lucas Kanashiro', 'Thiago Ribeiro', 'Rodrigo Siqueira','Macartur Sousa', 'Antonio Terceiro']
   gem.require_paths = %w(lib)
-  gem.files = `git ls-files -z`.split("\x0")
-  gem.test_files = `git ls-files -- {test,spec,feature}/*`.split("\n")
+  gem.files = %w{Rakefile LICENSE.md README.md config.ru Gemfile} + Dir.glob("*.gemspec") +
+              Dir.glob("{lib,spec}/**/*", File::FNM_DOTMATCH).reject { |f| File.directory?(f) }
   gem.license = "Expat"
   gem.required_rubygems_version = '>= 1.3.5'
 end
